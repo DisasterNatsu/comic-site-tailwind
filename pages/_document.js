@@ -14,6 +14,7 @@ export default function Document() {
           href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap"
           rel="stylesheet"
         />
+        <link rel="icon" href="/logo.ico" sizes="any" />
       </Head>
       <body className="h-full">
         <div className="container mx-auto dark:text-white">

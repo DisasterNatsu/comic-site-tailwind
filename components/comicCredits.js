@@ -28,10 +28,6 @@ const ComicCredits = ({ author, totalChapters, artist, status, origin }) => {
         <p>{status}</p>
       </div>
       <div className="flex justify-between px-2">
-        <p className="font-medium">Last Updated:</p>
-        <p>Sometime</p>
-      </div>
-      <div className="flex justify-between px-2">
         <p className="font-medium">Total Chapters:</p>
         <p>{totalChapters}</p>
       </div>

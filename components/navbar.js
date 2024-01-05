@@ -82,7 +82,7 @@ const Navbar = () => {
         <Link href="/home">
           <img
             loading="eager"
-            src="https://disasterscans.com/Asset/logo.png"
+            src="/assets/logo-min.png"
             className="w-16"
             alt="logo"
           />
@@ -108,7 +108,7 @@ const Navbar = () => {
             <div className="absolute p-4 bg-gradient-to-r from-gray-900 to-gray-950 dark:from-orange-100 dark:to-orange-50 xl:w-[500px] md:w-[300px] sm:w-[250px] w-[150px] rounded-xl flex flex-col gap-2 top-20 text-white dark:text-dark">
               {activeSearch.map((result, index) => {
                 return (
-                  <div>
+                  <div key={index}>
                     <Image
                       src={`https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${result.CoverImage}`}
                       width={70}
