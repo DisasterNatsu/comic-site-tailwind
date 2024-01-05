@@ -1,8 +1,10 @@
 import Caurasel from "@/components/caurasel";
 import ChapterNavButton from "@/components/chapterNavigationButtons";
+import Disqus from "@/components/disqus";
 import Layout from "@/layout/layout";
 import { Axios } from "@/utils/AxiosConfig";
 import { NextSeo } from "next-seo";
+import { useRouter } from "next/router";
 import React from "react";
 
 const Chapter = ({ chapter, chapterAll }) => {
@@ -13,6 +15,17 @@ const Chapter = ({ chapter, chapterAll }) => {
   const comicNameLink = chapter.ComicTitle.toLowerCase().split(" ").join("-");
 
   const ogUrl = `https://diasterscans.com/comics/${chapter.comicID}-${comicNameLink}/${chapter.chapterID}-chapter-${chapter.ChapterNumber}`;
+
+  // get useRouter from next/router
+
+  const Router = useRouter();
+
+  // disqus codes
+
+  const stringId = Router.query.chapter.split("-");
+  const intId = JSON.parse(stringId[0]);
+  const name = stringId.splice(1, stringId.length - 1).join(" ");
+  const configUrl = `http://localhost:3000/${Router.query.comicName}/${Router.query.chapter}`;
 
   return (
     <>
@@ -71,6 +84,9 @@ const Chapter = ({ chapter, chapterAll }) => {
         <section className="w-full h-full my-10">
           <ChapterNavButton chapter={chapter} allChapters={chapterAll} />
         </section>
+        <div className="mt-20 border-t-2 pt-10 border-dotted border-black dark:border-white">
+          <Disqus identifier={intId} title={name} query={configUrl} />
+        </div>
       </Layout>
     </>
   );

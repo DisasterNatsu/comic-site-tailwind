@@ -7,6 +7,8 @@ import FirstAndLast from "@/components/buttonsFirstAndLast";
 import PaginationButtons from "@/components/paginationButtons";
 import ChapterList from "@/components/chapterList";
 import { NextSeo } from "next-seo";
+import { useRouter } from "next/router";
+import Disqus from "@/components/disqus";
 
 const ComicDetails = (props) => {
   // Defining Router
@@ -25,6 +27,15 @@ const ComicDetails = (props) => {
       </div>
     );
   }
+
+  // disqus logic
+
+  const Router = useRouter();
+
+  const stringId = Router.query.comicName.split("-");
+  const intId = JSON.parse(stringId[0]);
+  const name = stringId.splice(1, stringId.length - 1).join(" ");
+  const configUrl = `http://localhost:3000/${Router.query.comicName}`;
 
   // Pagination Logic
 
@@ -137,6 +148,9 @@ const ComicDetails = (props) => {
               sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
             ></iframe>
           </div>
+        </div>
+        <div className="mt-20 border-t-2 pt-10 border-dotted border-black dark:border-white">
+          <Disqus identifier={intId} title={name} query={configUrl} />
         </div>
       </Layout>
     </>
