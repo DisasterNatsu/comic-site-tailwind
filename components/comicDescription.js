@@ -5,7 +5,7 @@ const CommicDescription = ({ desc }) => {
 
   return (
     <div className="text-center md:text-left md:px-2 h-full">
-      <h1 className="text-lg md:text-3xl font-medium border-b-2 border-dotted">
+      <h1 className="text-lg md:text-3xl font-medium border-b-2 border-dotted border-neutral-600 dark:border-white">
         Description
       </h1>
       <p

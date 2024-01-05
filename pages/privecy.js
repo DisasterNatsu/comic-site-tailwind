@@ -309,9 +309,12 @@ const Privecy = () => {
           <p className="md:text-left text-center my-3">
             If you have any questions or suggestions about our Privacy Policy,
             do not hesitate to{" "}
-            <a target="_blank" className="text-slate-400 hover:text-yellow-400">
+            <Link
+              href="/contact"
+              className="text-slate-400 hover:text-yellow-400 cursor-pointer"
+            >
               contact us
-            </a>
+            </Link>
             .
           </p>
         </section>

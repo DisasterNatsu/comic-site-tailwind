@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Layout from "@/layout/layout";
 import { Axios } from "@/utils/AxiosConfig";
-import CommicDescription from "@/components/commicDescription";
+import CommicDescription from "@/components/comicDescription";
 import ComicCredits from "@/components/comicCredits";
 import FirstAndLast from "@/components/buttonsFirstAndLast";
 import PaginationButtons from "@/components/paginationButtons";
@@ -46,7 +46,10 @@ const ComicDetails = (props) => {
 
           <div className="w-full hidden md:flex flex-col gap-y-3">
             <CommicDescription desc={comic.Description} />
-            <FirstAndLast />
+            <FirstAndLast
+              firstChapters={chapters[chapters.length - 1]}
+              lastChapter={chapters[0]}
+            />
           </div>
 
           {/* Mobile's Description and Credits */}

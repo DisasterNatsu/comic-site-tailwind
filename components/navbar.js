@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { FaSearch, FaBars, FaTimes } from "react-icons/fa";
 import { Popover, Transition } from "@headlessui/react";
 import ThemeToggle from "./themeToggle";
@@ -6,13 +6,35 @@ import UserDropdown from "./userDropDown";
 import Link from "next/link";
 import Cookies from "js-cookie";
 import { Axios } from "@/utils/AxiosConfig";
+import { NavData } from "@/static/navData";
+import Image from "next/image";
 
 const Navbar = () => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [userName, setUserName] = useState("");
+  const [activeSearch, setActiveSearch] = useState([]); // For searchbar
 
-  const handleSearch = (e) => {
-    e.preventDefault(); //Todo
+  const handleSearch = async (e) => {
+    if (e.target.value == "") {
+      setActiveSearch([]);
+      return false;
+    }
+
+    // fetch the data from api, currently using an empty data variable as to not make vs code mad
+
+    const comics = await Axios.get("/comics/all/comics");
+
+    let data = await comics.data;
+
+    setActiveSearch(
+      data
+        .filter((d) =>
+          d.ComicTitle.toLocaleLowerCase().includes(
+            e.target.value.toLocaleLowerCase()
+          )
+        )
+        .slice(0, 8)
+    );
   };
 
   // check if user is logged in
@@ -46,6 +68,12 @@ const Navbar = () => {
     }
   };
 
+  // Call isLoggedIn in useEffect hook (TODO)
+
+  useEffect(() => {
+    isLoggedIn();
+  }, []);
+
   return (
     <Popover
       className={`py-3 flex items-center border-b-2 px-6 h-24 dark:text-white dark:border-white border-black`}
@@ -70,14 +98,29 @@ const Navbar = () => {
               type="search"
               placeholder="Type here..."
               className="xl:w-[500px] md:w-[300px] sm:w-[250px] w-[150px] p-3 rounded-full bg-slate-300 dark:bg-medium focus:outline-none"
+              onChange={(e) => handleSearch(e)}
             />
-            <button
-              className="absolute right-1 top-1/2 -translate-y-1/2 p-4 rounded-full"
-              onClick={handleSearch}
-            >
+            <button className="absolute right-1 top-1/2 -translate-y-1/2 p-4 rounded-full">
               <FaSearch className="text-slate-950" />
             </button>
           </div>
+          {activeSearch.length > 0 && (
+            <div className="absolute p-4 bg-gradient-to-r from-gray-900 to-gray-950 dark:from-orange-100 dark:to-orange-50 xl:w-[500px] md:w-[300px] sm:w-[250px] w-[150px] rounded-xl flex flex-col gap-2 top-20 text-white dark:text-dark">
+              {activeSearch.map((result, index) => {
+                return (
+                  <div>
+                    <Image
+                      src={`https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${result.CoverImage}`}
+                      width={70}
+                      height={90}
+                      className="object-cover"
+                    />
+                    <span>{result.ComicTitle}</span>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </form>
       </div>
 
@@ -85,46 +128,18 @@ const Navbar = () => {
 
       <div className="grow">
         <ul className="hidden lg:flex items-center justify-center gap-2 md:gap-8">
-          <li>
-            <Link
-              href="/home"
-              className="hover:bg-yellow-400  hover:text-slate-900  p-2 py-3 rounded-md"
-            >
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/comics"
-              className="hover:bg-yellow-400  hover:text-slate-900  p-2 py-3 rounded-md"
-            >
-              Comics
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/about"
-              className="hover:bg-yellow-400  hover:text-slate-900  p-2 py-3 rounded-md"
-            >
-              About
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/privecy"
-              className="hover:bg-yellow-400  hover:text-slate-900  p-2 py-3 rounded-md"
-            >
-              Privecy
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/dmca"
-              className="hover:bg-yellow-400  hover:text-slate-900 p-2 py-3 rounded-md"
-            >
-              DMCA
-            </Link>
-          </li>
+          {NavData.map((item, i) => {
+            return (
+              <li key={i}>
+                <Link
+                  href={item.link}
+                  className="hover:bg-yellow-400  hover:text-slate-900  p-2 py-3 rounded-md"
+                >
+                  {item.title}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </div>
 
@@ -171,36 +186,17 @@ const Navbar = () => {
 
             <div className="mt-6">
               <nav className="grid gap-y-8 mt-6">
-                <Link
-                  className="px-4 focus:outline-none focus:ring-inset"
-                  href="/home"
-                >
-                  Home
-                </Link>
-                <Link
-                  className="px-4 focus:outline-none focus:ring-inset"
-                  href="/comics"
-                >
-                  Comics
-                </Link>
-                <Link
-                  className="px-4 focus:outline-none focus:ring-inset"
-                  href="/about"
-                >
-                  About
-                </Link>
-                <Link
-                  className="px-4 focus:outline-none focus:ring-inset"
-                  href="/privecy"
-                >
-                  Privecy
-                </Link>
-                <Link
-                  className="px-4 focus:outline-none focus:ring-inset"
-                  href="/dmca"
-                >
-                  DMCA
-                </Link>
+                {NavData.map((item, i) => {
+                  return (
+                    <Link
+                      key={i}
+                      className="px-4 focus:outline-none focus:ring-inset"
+                      href={item.link}
+                    >
+                      {item.title}
+                    </Link>
+                  );
+                })}
               </nav>
             </div>
 
